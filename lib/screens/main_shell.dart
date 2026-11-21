@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show ImageFilter;
+
 import 'package:mornye/controllers/open_audio_controller.dart';
 import 'package:mornye/services/audio_file_open_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -1079,9 +1080,7 @@ class _MainShellState extends ConsumerState<MainShell>
         heroAnimationsEnabled: heroAnimationsEnabled,
         child: const _HomeTabRoot(),
       ),
-      const GenreExploreScreen(
-        key: ValueKey('tab-explore'),
-      ),
+      const GenreExploreScreen(key: ValueKey('tab-explore')),
       _TabShown(
         key: const ValueKey('tab-library'),
         shown: _currentIndex == 2,
@@ -1413,9 +1412,9 @@ class _MainShellState extends ConsumerState<MainShell>
                   child: ExpressiveNavigationRail(
                     selectedIndex: selectedDestination,
                     onDestinationSelected: _onNavTap,
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainer,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainer,
                     destinations: destinations,
                   ),
                 ),
@@ -1523,9 +1522,8 @@ class _MainShellState extends ConsumerState<MainShell>
                         selectedIndex: _currentIndex.clamp(0, maxIndex),
                         onDestinationSelected: _onNavTap,
                         isTablet: isTablet,
-                        backgroundColor: settingsGroupColor(
-                          context,
-                        ).withValues(alpha: 0.72),
+                        backgroundColor: settingsGroupColor(context)
+                            .withValues(alpha: 0.72),
                         destinations: destinations,
                       ),
                   ],

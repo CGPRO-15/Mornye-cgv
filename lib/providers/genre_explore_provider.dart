@@ -37,12 +37,14 @@ bool genreExploreItemIsDownloaded(
   }
   if (item.artists.trim().isNotEmpty) {
     final key = DownloadHistoryState.trackArtistKey(item.name, item.artists);
-    if (downloads.lookupItems
-        .any((track) => DownloadHistoryState.trackArtistKey(
-              track.trackName,
-              track.artistName,
-            ) ==
-            key)) {
+    if (downloads.lookupItems.any(
+      (track) =>
+          DownloadHistoryState.trackArtistKey(
+            track.trackName,
+            track.artistName,
+          ) ==
+          key,
+    )) {
       return true;
     }
   }
@@ -88,10 +90,7 @@ final genreExploreProvider =
 
       final sections = <GenreExploreSection>[];
       for (final feedSection in feed.sections) {
-        var items = filterDownloadedGenreItems(
-          feedSection.items,
-          downloads,
-        );
+        var items = filterDownloadedGenreItems(feedSection.items, downloads);
 
         // Related tracks are a second extension-only source. The seeds come
         // only from the extension's current section, never from downloaded
@@ -120,24 +119,24 @@ final genreExploreProvider =
                   ...map,
                   'provider_id':
                       map['provider_id']?.toString().trim().isNotEmpty == true
-                          ? map['provider_id']
-                          : relatedExtension.id,
+                      ? map['provider_id']
+                      : relatedExtension.id,
                 }),
             ];
-            items = filterDownloadedGenreItems(
-              [...relatedItems, ...items],
-              downloads,
-            );
+            items = filterDownloadedGenreItems([
+              ...relatedItems,
+              ...items,
+            ], downloads);
           }
         }
 
         final trackItems = items.where((item) => item.type == 'track');
         HistoryLookupRequest lookup(ExploreItem item) => HistoryLookupRequest(
-              spotifyId: item.id,
-              isrc: item.isrc,
-              trackName: item.name,
-              artistName: item.artists,
-            );
+          spotifyId: item.id,
+          isrc: item.isrc,
+          trackName: item.name,
+          artistName: item.artists,
+        );
         final lookups = [for (final item in trackItems) lookup(item)];
         if (lookups.isNotEmpty) {
           final existing = await ref.read(

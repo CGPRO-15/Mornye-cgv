@@ -231,8 +231,7 @@ class ShellNavigationService {
     if (_currentTabIndex == 1) return ShellTab.explore;
     if (_currentTabIndex == 2) return ShellTab.library;
     if (_showRepoTab && _currentTabIndex == 3) return ShellTab.repository;
-    if (_showSearchTab &&
-        _currentTabIndex == (_showRepoTab ? 4 : 3)) {
+    if (_showSearchTab && _currentTabIndex == (_showRepoTab ? 4 : 3)) {
       return ShellTab.search;
     }
     return ShellTab.settings;

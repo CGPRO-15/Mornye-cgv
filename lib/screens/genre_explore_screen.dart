@@ -23,9 +23,7 @@ class GenreExploreScreen extends ConsumerWidget {
     return Scaffold(
       body: sections.when(
         loading: () => const Center(child: AppLoadingIndicator()),
-        error: (error, _) => Center(
-          child: Text(error.toString()),
-        ),
+        error: (error, _) => Center(child: Text(error.toString())),
         data: (genreSections) {
           if (genreSections.isEmpty) {
             return CustomScrollView(
@@ -74,10 +72,7 @@ class GenreExploreScreen extends ConsumerWidget {
 }
 
 class _GenreSection extends StatelessWidget {
-  const _GenreSection({
-    required this.section,
-    required this.inset,
-  });
+  const _GenreSection({required this.section, required this.inset});
 
   final GenreExploreSection section;
   final double inset;
@@ -120,9 +115,8 @@ class _GenreSection extends StatelessWidget {
         );
         return;
       default:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(item.name)),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(item.name)));
     }
   }
 
@@ -136,9 +130,8 @@ class _GenreSection extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(inset, 20, inset, 12),
           child: Text(
             section.title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
@@ -150,10 +143,7 @@ class _GenreSection extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = section.items[index];
               final track = item.type == 'track'
-                  ? Track.fromBackendMap(
-                      item.toJson(),
-                      source: item.providerId,
-                    )
+                  ? Track.fromBackendMap(item.toJson(), source: item.providerId)
                   : null;
               return SizedBox(
                 width: coverSize,
