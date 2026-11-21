@@ -41,6 +41,8 @@ class ExploreItem {
   final String? providerId;
   final String? albumId;
   final String? albumName;
+  final String? isrc;
+  final String? previewUrl;
   final String? releaseDate;
   final int durationMs;
 
@@ -58,6 +60,8 @@ class ExploreItem {
     this.providerId,
     this.albumId,
     this.albumName,
+    this.isrc,
+    this.previewUrl,
     this.releaseDate,
     this.durationMs = 0,
   });
@@ -77,6 +81,8 @@ class ExploreItem {
       providerId: json['provider_id'] as String?,
       albumId: json['album_id'] as String?,
       albumName: json['album_name'] as String?,
+      isrc: json['isrc'] as String?,
+      previewUrl: json['preview_url'] as String?,
       releaseDate: json['release_date']?.toString(),
       durationMs: json['duration_ms'] as int? ?? 0,
     );
@@ -96,6 +102,8 @@ class ExploreItem {
     'provider_id': providerId,
     'album_id': albumId,
     'album_name': albumName,
+    'isrc': isrc,
+    'preview_url': previewUrl,
     'release_date': releaseDate,
     'duration_ms': durationMs,
   };

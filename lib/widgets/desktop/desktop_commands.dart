@@ -261,6 +261,7 @@ List<ShellTab> desktopDestinationTabs({
   required bool showStore,
 }) => [
   ShellTab.home,
+  ShellTab.explore,
   ShellTab.library,
   if (showStore) ShellTab.repository,
   if (mornye) ShellTab.search,

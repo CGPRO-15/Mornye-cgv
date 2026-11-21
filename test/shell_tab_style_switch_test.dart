@@ -19,9 +19,9 @@ void main() {
     test(
       'switching styles keeps the tab, not the index (store: $showStore)',
       () {
-        final materialSettings = showStore ? 3 : 2;
-        final mornyeSearch = showStore ? 3 : 2;
-        final mornyeSettings = showStore ? 4 : 3;
+        final materialSettings = showStore ? 4 : 3;
+        final mornyeSearch = showStore ? 4 : 3;
+        final mornyeSettings = showStore ? 5 : 4;
 
         // Material Settings stays Settings instead of becoming Search.
         expect(
@@ -37,7 +37,7 @@ void main() {
           switched(mornyeSearch, fromMornye: true, showStore: showStore),
           0,
         );
-        for (final index in [0, 1, if (showStore) 2]) {
+        for (final index in [0, 1, 2, if (showStore) 3]) {
           expect(
             switched(index, fromMornye: false, showStore: showStore),
             index,
@@ -57,7 +57,22 @@ void main() {
     );
   }
 
-  test('Mornye Search maps to its own tab', () {
-    expect(shellTabAt(2, mornye: true, showStore: false), ShellTab.search);
+  test('Explore is the second destination in both styles', () {
+    expect(shellTabAt(1, mornye: true, showStore: false), ShellTab.explore);
+    expect(shellTabAt(1, mornye: false, showStore: false), ShellTab.explore);
+    expect(
+      shellIndexOfTab(
+        ShellTab.explore,
+        mornye: true,
+        showStore: false,
+        desktop: false,
+      ),
+      1,
+    );
+  });
+
+  test('Mornye Search maps to its own tab after Explore', () {
+    expect(shellTabAt(3, mornye: true, showStore: false), ShellTab.search);
+    expect(shellTabAt(4, mornye: true, showStore: true), ShellTab.search);
   });
 }

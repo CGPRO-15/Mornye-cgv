@@ -669,7 +669,7 @@ void main() {
         tester
             .widget<NavigationRail>(find.byType(NavigationRail))
             .selectedIndex,
-        1,
+        2,
       );
     });
 
