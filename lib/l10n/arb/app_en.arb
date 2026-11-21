@@ -611,6 +611,14 @@
   "@navHome": {
     "description": "Bottom navigation - Home tab"
   },
+  "navExplore": "Explore",
+  "@navExplore": {
+    "description": "Bottom navigation - Explore tab"
+  },
+  "genreExploreEmpty": "Enable an extension with Home feed or related-track suggestions to discover new music.",
+  "@genreExploreEmpty": {
+    "description": "Message shown when Explore has no extension suggestions"
+  },
   "navLibrary": "Library",
   "@navLibrary": {
     "description": "Bottom navigation - Library tab"

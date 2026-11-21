@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-enum ShellTab { home, library, repository, settings, search }
+enum ShellTab { home, explore, library, repository, settings, search }
 
 class ShellNavigationService {
   static final searchRequests = ValueNotifier<int>(0);
@@ -181,11 +181,11 @@ class ShellNavigationService {
 
   static GlobalKey<NavigatorState>? _activeTabNavigatorKey() {
     if (_currentTabIndex == 0) return homeTabNavigatorKey;
-    if (_currentTabIndex == 1) return libraryTabNavigatorKey;
-    if (_showRepoTab && _currentTabIndex == 2) {
+    if (_currentTabIndex == 2) return libraryTabNavigatorKey;
+    if (_showRepoTab && _currentTabIndex == 3) {
       return repoTabNavigatorKey;
     }
-    if (_showSearchTab && _currentTabIndex == (_showRepoTab ? 3 : 2)) {
+    if (_showSearchTab && _currentTabIndex == (_showRepoTab ? 4 : 3)) {
       return searchTabNavigatorKey;
     }
     return null;
@@ -228,9 +228,10 @@ class ShellNavigationService {
 
   static ShellTab _tabAtCurrentIndex() {
     if (_currentTabIndex == 0) return ShellTab.home;
-    if (_currentTabIndex == 1) return ShellTab.library;
-    if (_showRepoTab && _currentTabIndex == 2) return ShellTab.repository;
-    if (_showSearchTab && _currentTabIndex == (_showRepoTab ? 3 : 2)) {
+    if (_currentTabIndex == 1) return ShellTab.explore;
+    if (_currentTabIndex == 2) return ShellTab.library;
+    if (_showRepoTab && _currentTabIndex == 3) return ShellTab.repository;
+    if (_showSearchTab && _currentTabIndex == (_showRepoTab ? 4 : 3)) {
       return ShellTab.search;
     }
     return ShellTab.settings;

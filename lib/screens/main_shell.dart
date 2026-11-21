@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show ImageFilter;
+
 import 'package:mornye/controllers/open_audio_controller.dart';
 import 'package:mornye/services/audio_file_open_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -25,6 +26,7 @@ import 'package:mornye/providers/track_provider.dart';
 import 'package:mornye/providers/user_profile_provider.dart';
 import 'package:mornye/providers/preview_player_provider.dart';
 import 'package:mornye/screens/home_tab.dart';
+import 'package:mornye/screens/genre_explore_screen.dart';
 import 'package:mornye/screens/library_directory_screen.dart';
 import 'package:mornye/screens/library_tracks_folder_screen.dart';
 import 'package:mornye/screens/mornye_library_screen.dart';
@@ -93,9 +95,10 @@ ShellTab shellTabAt(
   required bool showStore,
 }) {
   if (index == 0) return ShellTab.home;
-  if (index == 1) return ShellTab.library;
-  if (showStore && index == 2) return ShellTab.repository;
-  if (mornye && index == (showStore ? 3 : 2)) return ShellTab.search;
+  if (index == 1) return ShellTab.explore;
+  if (index == 2) return ShellTab.library;
+  if (showStore && index == 3) return ShellTab.repository;
+  if (mornye && index == (showStore ? 4 : 3)) return ShellTab.search;
   return ShellTab.settings;
 }
 
@@ -109,16 +112,17 @@ int? shellIndexOfTab(
   required bool desktop,
 }) => switch (tab) {
   ShellTab.home => 0,
-  ShellTab.library => 1,
-  ShellTab.repository => showStore ? 2 : null,
+  ShellTab.explore => 1,
+  ShellTab.library => 2,
+  ShellTab.repository => showStore ? 3 : null,
   // Material searches from Home.
-  ShellTab.search => mornye ? (showStore ? 3 : 2) : 0,
+  ShellTab.search => mornye ? (showStore ? 4 : 3) : 0,
   // Mornye phones open Settings as a page, not a destination.
   ShellTab.settings =>
     !mornye
-        ? (showStore ? 3 : 2)
-        : desktop
         ? (showStore ? 4 : 3)
+        : desktop
+        ? (showStore ? 5 : 4)
         : null,
 };
 
@@ -498,7 +502,7 @@ class _MainShellState extends ConsumerState<MainShell>
       context.isMornye && (isDesktopPlatform || isAndroidTv);
 
   int _settingsIndex(bool showStore) =>
-      context.isMornye ? (showStore ? 4 : 3) : (showStore ? 3 : 2);
+      context.isMornye ? (showStore ? 5 : 4) : (showStore ? 4 : 3);
 
   void _onShellTabRequested(ShellTab tab) {
     // Picking a destination returns from Now Playing to the content pane.
@@ -512,9 +516,10 @@ class _MainShellState extends ConsumerState<MainShell>
     );
     final index = switch (tab) {
       ShellTab.home => 0,
-      ShellTab.search => context.isMornye ? (showStore ? 3 : 2) : 0,
-      ShellTab.library => 1,
-      ShellTab.repository => showStore ? 2 : null,
+      ShellTab.explore => 1,
+      ShellTab.search => context.isMornye ? (showStore ? 4 : 3) : 0,
+      ShellTab.library => 2,
+      ShellTab.repository => showStore ? 3 : null,
       ShellTab.settings => _settingsIndex(showStore),
     };
     if (index != null) _onNavTap(index, resetHome: tab != ShellTab.search);
@@ -708,7 +713,7 @@ class _MainShellState extends ConsumerState<MainShell>
 
     final trackState = ref.read(trackProvider);
     final isSearchTab =
-        _currentIndex == (context.isMornye ? (showStore ? 3 : 2) : 0);
+        _currentIndex == (context.isMornye ? (showStore ? 4 : 3) : 0);
 
     if (isSearchTab &&
         trackState.isShowingRecentAccess &&
@@ -779,8 +784,9 @@ class _MainShellState extends ConsumerState<MainShell>
 
   ShellTab _tabForIndex(int index, bool showStore) {
     if (index == 0) return ShellTab.home;
-    if (index == 1) return ShellTab.library;
-    if (showStore && index == 2) return ShellTab.repository;
+    if (index == 1) return ShellTab.explore;
+    if (index == 2) return ShellTab.library;
+    if (showStore && index == 3) return ShellTab.repository;
     if (_mornyeSettingsTab && index == _settingsIndex(showStore)) {
       return ShellTab.settings;
     }
@@ -805,6 +811,12 @@ class _MainShellState extends ConsumerState<MainShell>
             icon: mornye ? CupertinoIcons.house : Icons.home_outlined,
             selectedIcon: mornye ? CupertinoIcons.house_fill : Icons.home,
             label: l10n.navHome,
+          ),
+          ShellTab.explore => DesktopDestination(
+            tab: tab,
+            icon: CupertinoIcons.compass,
+            selectedIcon: CupertinoIcons.compass,
+            label: l10n.navExplore,
           ),
           ShellTab.library => DesktopDestination(
             tab: tab,
@@ -1004,9 +1016,9 @@ class _MainShellState extends ConsumerState<MainShell>
 
   NavigatorState? _navigatorForTab(int index, bool showStore) {
     if (index == 0) return _homeTabNavigatorKey.currentState;
-    if (index == 1) return _libraryTabNavigatorKey.currentState;
-    if (showStore && index == 2) return _repoTabNavigatorKey.currentState;
-    if (context.isMornye && index == (showStore ? 3 : 2)) {
+    if (index == 2) return _libraryTabNavigatorKey.currentState;
+    if (showStore && index == 3) return _repoTabNavigatorKey.currentState;
+    if (context.isMornye && index == (showStore ? 4 : 3)) {
       return _searchTabNavigatorKey.currentState;
     }
     return null;
@@ -1068,9 +1080,10 @@ class _MainShellState extends ConsumerState<MainShell>
         heroAnimationsEnabled: heroAnimationsEnabled,
         child: const _HomeTabRoot(),
       ),
+      const GenreExploreScreen(key: ValueKey('tab-explore')),
       _TabShown(
         key: const ValueKey('tab-library'),
-        shown: _currentIndex == 1,
+        shown: _currentIndex == 2,
         child: _TabNavigator(
           navigatorKey: _libraryTabNavigatorKey,
           observers: [
@@ -1280,6 +1293,13 @@ class _MainShellState extends ConsumerState<MainShell>
         ),
         selectedIcon: BouncingIcon(child: const AppIcon(Icons.home)),
         label: l10n.navHome,
+      ),
+      NavigationDestination(
+        icon: const AppIcon(CupertinoIcons.compass),
+        selectedIcon: BouncingIcon(
+          child: const AppIcon(CupertinoIcons.compass),
+        ),
+        label: context.l10n.navExplore,
       ),
       NavigationDestination(
         icon: context.isMornye
