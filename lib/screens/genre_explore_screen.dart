@@ -115,8 +115,9 @@ class _GenreSection extends StatelessWidget {
         );
         return;
       default:
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(item.name)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(item.name)));
     }
   }
 
@@ -130,8 +131,9 @@ class _GenreSection extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(inset, 20, inset, 12),
           child: Text(
             section.title,
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
@@ -166,15 +168,15 @@ class _GenreSection extends StatelessWidget {
                               : Container(
                                   width: coverSize,
                                   height: coverSize,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHighest,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.surfaceContainerHighest,
                                   child: Icon(
                                     Icons.music_note,
                                     size: 48,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                         ),
