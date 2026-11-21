@@ -1412,9 +1412,9 @@ class _MainShellState extends ConsumerState<MainShell>
                   child: ExpressiveNavigationRail(
                     selectedIndex: selectedDestination,
                     onDestinationSelected: _onNavTap,
-                    backgroundColor: Theme.of(context)
-                        .colorScheme
-                        .surfaceContainer,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainer,
                     destinations: destinations,
                   ),
                 ),
@@ -1522,8 +1522,9 @@ class _MainShellState extends ConsumerState<MainShell>
                         selectedIndex: _currentIndex.clamp(0, maxIndex),
                         onDestinationSelected: _onNavTap,
                         isTablet: isTablet,
-                        backgroundColor: settingsGroupColor(context)
-                            .withValues(alpha: 0.72),
+                        backgroundColor: settingsGroupColor(
+                          context,
+                        ).withValues(alpha: 0.72),
                         destinations: destinations,
                       ),
                   ],
